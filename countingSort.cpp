@@ -1,64 +1,44 @@
 #include <iostream>
-#include <vector>
 using namespace std;
-#define SIZE 10
 
-
-int findMax(int array[]){
-
-	int max = array[0];
-
-	for(int i = 1; i<SIZE;i++){
-		if(array[i]>max)
-			max = array[i];
+int getMax(int A[],int n){
+	
+	int max = A[0];
+	for(int i=1;i<n;i++){
+		if(A[i]>max)
+			max = A[i];
 	}
 	return max;
 }
 
-void countingSort(int array[]){
+void counting(int A[],int n){
+
+	int max = getMax(A,n);
 	
-	int vectorSize = findMax(array);
-	int newArray[SIZE],i,sum=0,element;
+	int B[n],pos1[max]={0},pos2[max+1]={0},i;
+
+	for(i=0;i<n;i++) pos1[A[i]]++;
 	
-	vector<int> pos0(vectorSize,0),pos1(vectorSize+1,0);
-	
-	for(i=0;i<SIZE;i++){
-		if(!pos0[array[i]])
-		 	pos0[array[i]] = 0;
-	
-		pos0[array[i]] = pos0[array[i]] + 1; 				
-	}	
-	
-	for(i=1;i<pos1.size();i++){
-		sum += pos0[i-1];
-		pos1[i] = sum; 				
-	}
-	
-	for(i=0;i<SIZE;i++){
-		element = array[i];
-		
-		newArray[pos1[element]] = element;
-		pos1[element] +=1; 				
-	}
-	
-	cout << "Array after counting sort  : ";
-	
-	for(i=0;i<SIZE;i++){
-		cout << newArray[i]<<" ";			
-	}
-	cout <<endl;
+	for(i=1;i<max+1;i++) pos2[i] = pos2[i-1] + pos1[i-1];
+
+	for(i=0;i<n;i++) B[pos2[A[i]]++] = A[i];
+
+	for(i=0;i<n;i++) A[i] = B[i];
 }
 
 int main(){
-	int array[] = {4,2,4,1,5,7,6,3,2,5};
+
+	int A[]= {230,3,4,2,5,1,4,7};
+	int n = 8,i;
 	
-	cout << "Array before counting sort : ";
-	for(int i=0;i<SIZE;i++){
-		cout << array[i]<<" ";			
-	}
-	cout <<endl;
+	cout << "Array before sorting : ";
+	for(i=0;i<n;i++) cout << A[i] << " ";
+	cout << endl;
 	
-	countingSort(array);
+	counting(A,n);
 	
-	return 0;
+	cout << "Array after sorting  : ";
+	for(i=0;i<n;i++) cout << A[i] << " ";
+	cout << endl;
+
 }
